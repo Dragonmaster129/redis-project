@@ -1,0 +1,45 @@
+html {
+  font-size: 62.5%; // 1rem is 10px
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+  font-family: "montserrat";
+}
+
+body {
+  overflow-x: hidden;
+  font-weight: normal;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  display: grid;
+  justify-items: center;
+}
+
+.router,
+.routes-wrapper,
+.content-wrapper {
+  width: 100%;
+}
+
+.navbar-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  background-color: teal;
+}
+
+@import url("./shorten-url.scss");
+@import url("./all-links.scss");

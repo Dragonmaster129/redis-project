@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "express": "^4.17.3",
+    "redis": "^4.0.4"
+  },
+  "name": "redis-server-connect",
+  "version": "0.0.1",
+  "description": "connect to redis server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve"
+  },
+  "author": "dragonprogrammer129 <dragons4756@gmail.com> (https://www.npmjs.com/~dragonprogrammer129)",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^27.5.1"
+  }
+}
