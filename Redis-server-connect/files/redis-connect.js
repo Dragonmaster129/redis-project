@@ -15,6 +15,12 @@ import { createClient } from "redis";
 const express = require("express");
 const app = express();
 
+// CRUD functionality
+// Create - Post
+// Read - Get
+// Update - Put
+// Delete - Delete
+
 function handleGetReq(req) {
   // What is needed to get info from the DB
 }

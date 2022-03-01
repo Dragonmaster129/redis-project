@@ -21,6 +21,7 @@ export default class ShortenUrl extends Component {
   onSubmitHandler(event) {
     event.preventDefault();
     console.log("submitted the link");
+    // Fetch to redis service
   }
 
   render() {
