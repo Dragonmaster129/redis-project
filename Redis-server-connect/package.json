@@ -8,12 +8,16 @@
   "description": "connect to redis server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "webpack serve"
   },
   "author": "dragonprogrammer129 <dragons4756@gmail.com> (https://www.npmjs.com/~dragonprogrammer129)",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^27.5.1"
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
+    "babel-jest": "^27.5.1",
+    "jest": "^27.5.1",
+    "regenerator-runtime": "^0.13.9"
   }
 }

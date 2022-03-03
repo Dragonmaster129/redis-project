@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import axios from "axios";
+import { response } from "express";
 
 export default class ShortenUrl extends Component {
   constructor(props) {
@@ -22,6 +24,15 @@ export default class ShortenUrl extends Component {
     event.preventDefault();
     console.log("submitted the link");
     // Fetch to redis service
+    async () => {
+      let promise = fetch("localhost:3001");
+
+      if (response.ok) {
+        let json = await response.json();
+      } else {
+        alert("HTTP-Error: " + response.status);
+      }
+    };
   }
 
   render() {
