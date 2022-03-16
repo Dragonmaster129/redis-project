@@ -1,6 +1,7 @@
 const redis = require("redis");
 
 const client = redis.createClient();
+const Str = require("@supercharge/strings");
 
 export async function startup() {
   console.log("starting");
@@ -21,11 +22,19 @@ const express = require("express");
 const app = express();
 
 // Using express.urlencoded middleware
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
+app.use(express.json());
+
+export function set(setting, val) {
+  app.set(setting, val);
+}
+
+export function get(setting) {
+  app.get(setting);
+}
+
+export function listen(port, callback) {
+  app.listen(port, callback);
+}
 
 // CRUD functionality
 // Create - Post
@@ -36,16 +45,31 @@ app.use(
 export function handleGetReq(req) {
   // What is needed to get info from the DB
 
-  return 1;
+  const random = Str.random();
+  console.log(random);
+  // 'zONHF73w_4M3cmv7GZpXG'
+
+  redis.set(random, req);
+
+  return redis.get(random);
 }
 
-app.get("/", function (req, res) {
+app.get("/links", function (req, res) {
   // Put the functionality in here
-  res.send(`Hello World`);
+  // retrieve all the links
+  res.send(`Hello World getter`);
 });
 
-app.post("/", function (req, res) {
-  res.send("Hello there");
+app.post("/link", function (req, res, next) {
+  // console.log(req);
+  console.log(req.body);
+  res.send("Hello there posty");
+});
+
+app.delete("/link/:key", function (req, res) {
+  // remove key value pair
+  console.log(req.params.key);
+  res.send("Hello there deleter");
 });
 
 // app.listen(3001);

@@ -2,8 +2,8 @@ import { shutdown, startup, handleGetReq } from "../files/redisConnect.js";
 
 describe("redisConnect", () => {
   it("works", async () => {
-    const redis = await handleGetReq("yay");
-    expect(redis).toEqual(1);
+    const redis = await handleGetReq("localhost:3000");
+    expect(redis).toEqual("localhost:3000");
   });
 });
 

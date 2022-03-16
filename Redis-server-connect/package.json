@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@supercharge/strings": "^1.25.0",
+    "esm": "^3.2.25",
     "express": "^4.17.3",
     "redis": "^4.0.4"
   },
@@ -9,7 +11,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "webpack serve"
+    "start": "node -r esm ./bin/www"
   },
   "author": "dragonprogrammer129 <dragons4756@gmail.com> (https://www.npmjs.com/~dragonprogrammer129)",
   "license": "ISC",

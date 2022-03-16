@@ -1,6 +1,4 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { response } from "express";
+import React, { Component, isValidElement } from "react";
 
 export default class ShortenUrl extends Component {
   constructor(props) {
@@ -25,13 +23,31 @@ export default class ShortenUrl extends Component {
     console.log("submitted the link");
     // Fetch to redis service
     async () => {
-      let promise = fetch("localhost:3001");
+      let promise = fetch("localhost:3001/link", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify(this.state.link),
+      })
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            console.log(res.error); // may have to await
+            throw error;
+          }
+        })
+        .then((jsonObject) => {
+          console.log(jsonObject);
+        })
+        .catch((error) => {});
 
-      if (response.ok) {
-        let json = await response.json();
-      } else {
-        alert("HTTP-Error: " + response.status);
-      }
+      // if (response.ok) {
+      //   let json = await response.json();
+      // } else {
+      //   alert("HTTP-Error: " + response.status);
+      // }
     };
   }
 
