@@ -32,10 +32,12 @@ export async function shutdown(cleanup = false) {
 
 // Express Node Module
 const express = require("express");
+const cors = require("cors");
 const app = express();
 
 // Using express.urlencoded middleware
 app.use(express.json());
+app.use(cors());
 
 export function set(setting, val) {
   app.set(setting, val);
@@ -97,10 +99,11 @@ app.get("/links", function (req, res) {
   res.send(`Hello World getter`);
 });
 
-app.post("/link", function (req, res, next) {
+app.post("/link", function (req, res) {
   // add key and value in db
+  console.log(req);
   console.log(req.body);
-  handlePostReq(req.body.link);
+  handlePostReq(req.body[0]);
   res.send("Hello there posty");
 });
 

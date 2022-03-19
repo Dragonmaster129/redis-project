@@ -6,6 +6,7 @@ export default class ShortenUrl extends Component {
 
     this.state = {
       link: "",
+      shortenedUrl: "",
     };
 
     this.onSubmitHandler = this.onSubmitHandler.bind(this);
@@ -22,17 +23,19 @@ export default class ShortenUrl extends Component {
     event.preventDefault();
     console.log("submitted the link");
     // Fetch to redis service
-    async () => {
-      let promise = fetch("localhost:3001/link", {
+    console.log(this.state.link);
+    let dofetch = async () => {
+      fetch("http://localhost:3001/link", {
         method: "POST",
         headers: {
           "Content-Type": "application/json;charset=utf-8",
         },
-        body: JSON.stringify(this.state.link),
+        body: "[" + JSON.stringify(this.state.link) + "]",
       })
         .then((res) => {
+          console.log("123");
           if (res.ok) {
-            return res.json();
+            console.log(res.json());
           } else {
             console.log(res.error); // may have to await
             throw error;
@@ -41,7 +44,9 @@ export default class ShortenUrl extends Component {
         .then((jsonObject) => {
           console.log(jsonObject);
         })
-        .catch((error) => {});
+        .catch((error) => {
+          console.log(error);
+        });
 
       // if (response.ok) {
       //   let json = await response.json();
@@ -49,6 +54,7 @@ export default class ShortenUrl extends Component {
       //   alert("HTTP-Error: " + response.status);
       // }
     };
+    dofetch();
   }
 
   render() {
@@ -65,6 +71,10 @@ export default class ShortenUrl extends Component {
           ></input>
           <button className="shorten-url-button">Shorten URL</button>
         </form>
+        <div className="shortened-url">
+          <h1>Your shortened URL is:</h1>
+          <h1>{this.state.shortenedUrl}</h1>
+        </div>
       </div>
     );
   }
