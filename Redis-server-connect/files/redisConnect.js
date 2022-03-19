@@ -1,20 +1,33 @@
 const redis = require("redis");
-
-const client = redis.createClient();
 const Str = require("@supercharge/strings");
 
-export async function startup() {
+const redisClient = redis.createClient();
+let keyPrefix = "standard";
+
+export async function startup(prefix = "standard") {
+  keyPrefix = prefix;
   console.log("starting");
-  client.on("error", (err) => console.log("Redis Client Error", err));
+  redisClient.on("error", (err) => console.log("Redis Client Error", err));
 
-  await client.connect();
+  await redisClient.connect();
 
-  await client.set("key", "value");
-  const value = await client.get("key");
+  await redisClient.set("key", "value");
+  const value = await redisClient.get("key");
+  await redisClient.del("key");
 }
 
-export function shutdown() {
-  client.disconnect();
+export async function shutdown(cleanup = false) {
+  if (cleanup) {
+    let keysToCleanup = await redisClient.keys(keyPrefix + "*");
+    keysToCleanup.forEach(async (element) => {
+      await redisClient.del(element);
+    });
+  }
+  try {
+    await redisClient.quit();
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 // Express Node Module
@@ -42,26 +55,43 @@ export function listen(port, callback) {
 // Update - Put
 // Delete - Delete
 
-export function handleGetReq(req) {
+export async function handleGetAllReq() {
+  return await redisClient.keys("*");
+}
+
+export async function handleGetReq(key) {
+  return await redisClient.get(key);
+}
+
+export async function postToRedis(key, url) {
+  key = keyPrefix + key;
+  const results = await redisClient.get(key);
+  if (results != null) {
+    return 0;
+  } else {
+    return redisClient.set(key, url).catch((err) => console.log(err));
+  }
+}
+
+export async function handlePostReq(req) {
   // What is needed to get info from the DB
 
   const random = Str.random();
   console.log(random);
   // 'zONHF73w_4M3cmv7GZpXG'
 
-  redis.set(random, req);
+  // TODO it only returns OK, not supposed to.
 
-  return redis.get(random);
+  return await postToRedis(random, req);
 }
 
 app.get("/links", function (req, res) {
-  // Put the functionality in here
   // retrieve all the links
   res.send(`Hello World getter`);
 });
 
 app.post("/link", function (req, res, next) {
-  // console.log(req);
+  // add key and value in db
   console.log(req.body);
   res.send("Hello there posty");
 });
@@ -72,11 +102,7 @@ app.delete("/link/:key", function (req, res) {
   res.send("Hello there deleter");
 });
 
-// app.listen(3001);
-
-// const contactRedis = () => {
-//   // TODO
-//   // set up redis communication
-//   // send command to redis
-//   // recieve data and parse
-// };
+// TODO
+// set up redis communication
+// send command to redis
+// recieve data and parse
