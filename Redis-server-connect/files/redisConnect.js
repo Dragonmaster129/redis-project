@@ -56,10 +56,12 @@ export function listen(port, callback) {
 // Delete - Delete
 
 export async function handleGetAllReq() {
-  return await redisClient.keys("*");
+  return await redisClient.keys(keyPrefix + "*");
 }
 
 export async function handleGetReq(key) {
+  key = keyPrefix + key;
+
   return await redisClient.get(key);
 }
 
@@ -76,13 +78,18 @@ export async function postToRedis(key, url) {
 export async function handlePostReq(req) {
   // What is needed to get info from the DB
 
-  const random = Str.random();
+  let random = Str.random();
   console.log(random);
   // 'zONHF73w_4M3cmv7GZpXG'
 
-  // TODO it only returns OK, not supposed to.
+  let res = await postToRedis(random, req);
 
-  return await postToRedis(random, req);
+  while (res != "OK") {
+    random = Str.random();
+    res = await postToRedis(random, req);
+  }
+
+  return random;
 }
 
 app.get("/links", function (req, res) {
@@ -93,6 +100,7 @@ app.get("/links", function (req, res) {
 app.post("/link", function (req, res, next) {
   // add key and value in db
   console.log(req.body);
+  handlePostReq(req.body.link);
   res.send("Hello there posty");
 });
 
