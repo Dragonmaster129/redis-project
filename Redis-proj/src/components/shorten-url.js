@@ -25,24 +25,26 @@ export default class ShortenUrl extends Component {
     // Fetch to redis service
     console.log(this.state.link);
     let dofetch = async () => {
+      const bodyData = "[" + JSON.stringify(this.state.link) + "]";
       fetch("http://localhost:3001/link", {
         method: "POST",
         headers: {
           "Content-Type": "application/json;charset=utf-8",
         },
-        body: "[" + JSON.stringify(this.state.link) + "]",
+        body: bodyData,
       })
         .then((res) => {
           console.log("123");
           if (res.ok) {
-            console.log(res.json());
+            console.log(res);
+            return res.text();
           } else {
             console.log(res.error); // may have to await
             throw error;
           }
         })
-        .then((jsonObject) => {
-          console.log(jsonObject);
+        .then((text) => {
+          console.log(text);
         })
         .catch((error) => {
           console.log(error);

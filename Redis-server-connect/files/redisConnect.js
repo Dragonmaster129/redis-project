@@ -58,6 +58,8 @@ export function listen(port, callback) {
 // Delete - Delete
 
 export async function handleGetAllReq() {
+  // TODO remove keyPrefix from each key
+  // return object instead of array
   return await redisClient.keys(keyPrefix + "*");
 }
 
@@ -99,12 +101,12 @@ app.get("/links", function (req, res) {
   res.send(`Hello World getter`);
 });
 
-app.post("/link", function (req, res) {
+app.post("/link", async function (req, res) {
   // add key and value in db
   console.log(req);
   console.log(req.body);
-  handlePostReq(req.body[0]);
-  res.send("Hello there posty");
+  let key = await handlePostReq(req.body[0]);
+  res.send(key);
 });
 
 app.delete("/link/:key", function (req, res) {
