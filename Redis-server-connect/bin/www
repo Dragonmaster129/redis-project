@@ -4,6 +4,7 @@ var app = require("../files/redisConnect");
 
 app.set("port", process.env.PORT || 3001);
 let port = 3001; //app.get("port");
+app.startup();
 var server = app.listen(port, function () {
   console.log("Express server listening on port " + port);
 });

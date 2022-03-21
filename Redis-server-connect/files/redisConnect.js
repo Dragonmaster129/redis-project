@@ -6,7 +6,6 @@ let keyPrefix = "standard";
 
 export async function startup(prefix = "standard") {
   keyPrefix = prefix;
-  console.log("starting");
   redisClient.on("error", (err) => console.log("Redis Client Error", err));
 
   await redisClient.connect();
@@ -59,7 +58,7 @@ export function listen(port, callback) {
 
 export async function handleGetAllReq() {
   // TODO remove keyPrefix from each key
-  // return object instead of array
+  // return object with key and value pairs instead of array with only key
   return await redisClient.keys(keyPrefix + "*");
 }
 
@@ -80,8 +79,6 @@ export async function postToRedis(key, url) {
 }
 
 export async function handlePostReq(req) {
-  // What is needed to get info from the DB
-
   let random = Str.random();
   console.log(random);
   // 'zONHF73w_4M3cmv7GZpXG'
@@ -103,7 +100,6 @@ app.get("/links", function (req, res) {
 
 app.post("/link", async function (req, res) {
   // add key and value in db
-  console.log(req);
   console.log(req.body);
   let key = await handlePostReq(req.body[0]);
   res.send(key);
