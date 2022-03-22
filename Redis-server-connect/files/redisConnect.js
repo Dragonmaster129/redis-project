@@ -135,8 +135,7 @@ app.post("/link", async function (req, res) {
 
 app.delete("/link/:key", async function (req, res) {
   // remove key value pair
-  console.log(req.params.key);
-  res.send("Hello there deleter");
+  res.send(await handleDeleteReq(req.params.key));
 });
 
 // TODO

@@ -6,8 +6,19 @@
   align-items: center;
   margin-top: 1rem;
 
-  .link-wrapper {
+  .link-header-wrapper {
     width: 50vw;
     margin: 0.5rem;
+  }
+
+  .links-wrapper {
+    width: 50vw;
+
+    .link {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      border-bottom: 1px solid black;
+    }
   }
 }

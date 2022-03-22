@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Remove from "./remove";
 
 export default class AllLinks extends Component {
   constructor(props) {
@@ -8,11 +9,12 @@ export default class AllLinks extends Component {
       linkObj: {},
     };
     this.linkItems = this.linkItems.bind(this);
+    this.removeLink = this.removeLink.bind(this);
   }
 
   componentDidMount() {
     let dofetch = async () => {
-      fetch("http://localhost:3001/links", {
+      await fetch("http://localhost:3001/links", {
         method: "GET",
         headers: {
           "Content-Type": "application/json;charset=utf-8",
@@ -38,13 +40,19 @@ export default class AllLinks extends Component {
   linkItems() {
     return Object.keys(this.state.linkObj).map((key, i) => {
       return (
-        <div className={i} key={i}>
+        <div className="link" key={i}>
           <h2>
             <a href={this.state.linkObj[key]}>http://localhost:3000/{key}</a>
           </h2>
+          <Remove removeLink={this.removeLink} keyToLink={key} />
         </div>
       );
     });
+  }
+
+  removeLink(key) {
+    // event.preventDefault();
+    console.log(key);
   }
 
   render() {
