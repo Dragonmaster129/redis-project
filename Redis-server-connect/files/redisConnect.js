@@ -75,12 +75,12 @@ export async function handleGetAllReq() {
   return await addValuesToObj(newkeysArr);
 }
 
-export async function addValuesToObj(valuesArr) {
+export async function addValuesToObj(keysArr) {
   let obj = {};
-  valuesArr.forEach(async (element) => {
+  for (const element of keysArr) {
     let valueToAdd = await handleGetReq(element);
     obj[element] = valueToAdd;
-  });
+  }
   console.log(obj);
   return obj;
 }
@@ -123,6 +123,7 @@ export async function handleDeleteReq(keyToDelete) {
 app.get("/links", async function (req, res) {
   // retrieve all the links
   let keyObj = await handleGetAllReq();
+  console.log(keyObj);
   res.send(JSON.stringify(keyObj));
 });
 

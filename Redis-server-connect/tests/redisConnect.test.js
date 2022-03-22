@@ -14,7 +14,7 @@ const autoFillKey2 = "zONHF73w_4M3cmv7GZpXc";
 const autoFillUrl2 = "localhost:3000";
 
 describe("get all keys", () => {
-  it("fails", async () => {
+  it("first return nothing", async () => {
     let value = await handleGetAllReq();
     expect(value).toEqual({});
   });
@@ -46,8 +46,9 @@ describe("check for duplicate posts", () => {
 
 describe("delete key", () => {
   it("works", async () => {
-    let deleteReq = await handleDeleteReq(autoFillKey);
-    expect(deleteReq).toEqual(1);
+    await handleDeleteReq(autoFillKey);
+    let getReq = await handleGetReq(autoFillKey);
+    expect(getReq).toEqual(null);
   });
 });
 
