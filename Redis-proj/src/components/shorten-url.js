@@ -7,6 +7,7 @@ export default class ShortenUrl extends Component {
     this.state = {
       link: "",
       shortenedUrl: "",
+      returnedLink: "",
     };
 
     this.onSubmitHandler = this.onSubmitHandler.bind(this);
@@ -21,9 +22,6 @@ export default class ShortenUrl extends Component {
 
   onSubmitHandler(event) {
     event.preventDefault();
-    console.log("submitted the link");
-    // Fetch to redis service
-    console.log(this.state.link);
     let dofetch = async () => {
       const bodyData = "[" + JSON.stringify(this.state.link) + "]";
       fetch("http://localhost:3001/link", {
@@ -34,7 +32,6 @@ export default class ShortenUrl extends Component {
         body: bodyData,
       })
         .then((res) => {
-          console.log("123");
           if (res.ok) {
             console.log(res);
             return res.text();
@@ -45,6 +42,10 @@ export default class ShortenUrl extends Component {
         })
         .then((text) => {
           console.log(text);
+          let resArr = text.split(" ");
+          let resLink = resArr[0];
+          let resKey = "http://localhost:3000/" + resArr[1];
+          this.setState({ shortenedUrl: resKey, returnedLink: resLink });
         })
         .catch((error) => {
           console.log(error);
@@ -75,7 +76,9 @@ export default class ShortenUrl extends Component {
         </form>
         <div className="shortened-url">
           <h1>Your shortened URL is:</h1>
-          <h1>{this.state.shortenedUrl}</h1>
+          <h1>
+            <a href={this.state.returnedLink}>{this.state.shortenedUrl}</a>
+          </h1>
         </div>
       </div>
     );

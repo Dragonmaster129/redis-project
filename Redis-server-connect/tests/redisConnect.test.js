@@ -5,15 +5,26 @@ import {
   handleGetReq,
   handleGetAllReq,
   postToRedis,
+  handleDeleteReq,
 } from "../files/redisConnect.js";
 
 const autoFillKey = "zONHF73w_4M3cmv7GZpXG";
 const autoFillUrl = "localhost:3000";
+const autoFillKey2 = "zONHF73w_4M3cmv7GZpXc";
+const autoFillUrl2 = "localhost:3000";
 
 describe("get all keys", () => {
   it("fails", async () => {
     let value = await handleGetAllReq();
-    expect(value).toEqual([]);
+    expect(value).toEqual({});
+  });
+});
+
+describe("get all keys when only one is there", () => {
+  it("works", async () => {
+    await postToRedis(autoFillKey2, autoFillUrl2);
+    let value = await handleGetAllReq();
+    expect(value).toEqual({ [autoFillKey2]: autoFillUrl2 });
   });
 });
 
@@ -33,10 +44,17 @@ describe("check for duplicate posts", () => {
   });
 });
 
+describe("delete key", () => {
+  it("works", async () => {
+    let deleteReq = await handleDeleteReq(autoFillKey);
+    expect(deleteReq).toEqual(1);
+  });
+});
+
 describe("get all keys", () => {
   it("fails", async () => {
     let value = await handleGetAllReq();
-    expect(value).not.toEqual([]);
+    expect(value).not.toEqual({});
   });
 });
 

@@ -59,7 +59,30 @@ export function listen(port, callback) {
 export async function handleGetAllReq() {
   // TODO remove keyPrefix from each key
   // return object with key and value pairs instead of array with only key
-  return await redisClient.keys(keyPrefix + "*");
+
+  let keysArr = await redisClient.keys(keyPrefix + "*");
+  let newkeysArr = [];
+
+  keysArr.forEach((element) => {
+    element = element.slice(keyPrefix.length);
+    newkeysArr.push(element);
+  });
+
+  console.log(newkeysArr);
+
+  // TODO returnObj doesnt get filled
+
+  return await addValuesToObj(newkeysArr);
+}
+
+export async function addValuesToObj(valuesArr) {
+  let obj = {};
+  valuesArr.forEach(async (element) => {
+    let valueToAdd = await handleGetReq(element);
+    obj[element] = valueToAdd;
+  });
+  console.log(obj);
+  return obj;
 }
 
 export async function handleGetReq(key) {
@@ -93,19 +116,23 @@ export async function handlePostReq(req) {
   return random;
 }
 
-app.get("/links", function (req, res) {
+export async function handleDeleteReq(keyToDelete) {
+  return await redisClient.del(keyPrefix + keyToDelete);
+}
+
+app.get("/links", async function (req, res) {
   // retrieve all the links
-  res.send(`Hello World getter`);
+  let keyObj = await handleGetAllReq();
+  res.send(JSON.stringify(keyObj));
 });
 
 app.post("/link", async function (req, res) {
-  // add key and value in db
   console.log(req.body);
   let key = await handlePostReq(req.body[0]);
-  res.send(key);
+  res.send(req.body[0] + " " + key);
 });
 
-app.delete("/link/:key", function (req, res) {
+app.delete("/link/:key", async function (req, res) {
   // remove key value pair
   console.log(req.params.key);
   res.send("Hello there deleter");
