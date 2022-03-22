@@ -33,7 +33,6 @@ export default class ShortenUrl extends Component {
       })
         .then((res) => {
           if (res.ok) {
-            console.log(res);
             return res.text();
           } else {
             console.log(res.error); // may have to await
@@ -41,7 +40,6 @@ export default class ShortenUrl extends Component {
           }
         })
         .then((text) => {
-          console.log(text);
           let resArr = text.split(" ");
           let resLink = resArr[0];
           let resKey = "http://localhost:3000/" + resArr[1];

@@ -68,8 +68,6 @@ export async function handleGetAllReq() {
     newkeysArr.push(element);
   });
 
-  console.log(newkeysArr);
-
   // TODO returnObj doesnt get filled
 
   return await addValuesToObj(newkeysArr);
@@ -81,7 +79,6 @@ export async function addValuesToObj(keysArr) {
     let valueToAdd = await handleGetReq(element);
     obj[element] = valueToAdd;
   }
-  console.log(obj);
   return obj;
 }
 
@@ -103,7 +100,6 @@ export async function postToRedis(key, url) {
 
 export async function handlePostReq(req) {
   let random = Str.random();
-  console.log(random);
   // 'zONHF73w_4M3cmv7GZpXG'
 
   let res = await postToRedis(random, req);
@@ -123,19 +119,18 @@ export async function handleDeleteReq(keyToDelete) {
 app.get("/links", async function (req, res) {
   // retrieve all the links
   let keyObj = await handleGetAllReq();
-  console.log(keyObj);
   res.send(JSON.stringify(keyObj));
 });
 
 app.post("/link", async function (req, res) {
-  console.log(req.body);
   let key = await handlePostReq(req.body[0]);
   res.send(req.body[0] + " " + key);
 });
 
 app.delete("/link/:key", async function (req, res) {
   // remove key value pair
-  res.send(await handleDeleteReq(req.params.key));
+  let response = await handleDeleteReq(req.params.key);
+  res.send(response.toString());
 });
 
 // TODO

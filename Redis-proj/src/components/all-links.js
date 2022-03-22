@@ -40,7 +40,7 @@ export default class AllLinks extends Component {
   linkItems() {
     return Object.keys(this.state.linkObj).map((key, i) => {
       return (
-        <div className="link" key={i}>
+        <div className="link" key={i} id={key}>
           <h2>
             <a href={this.state.linkObj[key]}>http://localhost:3000/{key}</a>
           </h2>
@@ -52,7 +52,29 @@ export default class AllLinks extends Component {
 
   removeLink(key) {
     // event.preventDefault();
-    console.log(key);
+    let dofetch = async () => {
+      await fetch(`http://localhost:3001/link/${key}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+      })
+        .then((res) => {
+          return res.text();
+        })
+        .then((text) => {
+          if (text == "1") {
+            delete this.state.linkObj[key];
+            const el = document.getElementById(key);
+            el.classList.add("hidden");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    dofetch();
   }
 
   render() {

@@ -20,5 +20,19 @@
       margin-bottom: 5px;
       border-bottom: 1px solid black;
     }
+
+    .hidden {
+      height: 0px;
+      border: 0px;
+      margin: 0px;
+      a {
+        color: #ffffff;
+      }
+      button {
+        color: #ffffff;
+        border: 0px;
+        background-color: #ffffff;
+      }
+    }
   }
 }
